@@ -1,4 +1,4 @@
-package com.velozo.bookstore.exceptions;
+package com.velozo.bookstore.service.exceptions;
 
 public class ObjectNotFoundException extends RuntimeException{
 

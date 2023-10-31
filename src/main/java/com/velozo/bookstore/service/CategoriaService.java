@@ -2,9 +2,11 @@ package com.velozo.bookstore.service;
 
 import com.velozo.bookstore.Dtos.CategoriaDTO;
 import com.velozo.bookstore.domain.Categoria;
-import com.velozo.bookstore.exceptions.ObjectNotFoundException;
+import com.velozo.bookstore.service.exceptions.DataIntegrityViolationException;
+import com.velozo.bookstore.service.exceptions.ObjectNotFoundException;
 import com.velozo.bookstore.repositories.CategoriaRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -35,5 +37,14 @@ public class CategoriaService {
         obj.setNome(objDTO.getNome());
         obj.setDescricao(objDTO.getDescricao());
         return repository.save(obj);
+    }
+
+    public void delete(Integer id) {
+        findById(id);
+        try {
+            repository.deleteById(id);
+        } catch (org.springframework.dao.DataIntegrityViolationException e) {
+            throw new DataIntegrityViolationException("Categoria não pode ser deletada! Possui livros associados.");
+        }
     }
 }
