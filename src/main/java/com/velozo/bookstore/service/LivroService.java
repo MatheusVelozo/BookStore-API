@@ -1,5 +1,6 @@
 package com.velozo.bookstore.service;
 
+import com.velozo.bookstore.domain.Categoria;
 import com.velozo.bookstore.domain.Livro;
 import com.velozo.bookstore.repositories.LivroRepository;
 import com.velozo.bookstore.service.exceptions.ObjectNotFoundException;
@@ -38,5 +39,12 @@ public class LivroService {
         newObj.setTitulo(obj.getTitulo());
         newObj.setNome_autor(obj.getNome_autor());
         newObj.setTexto(obj.getTexto());
+    }
+
+    public Livro create(Integer id_cat, Livro obj) {
+        obj.setId(null);
+        Categoria cat = categoriaService.findById(id_cat);
+        obj.setCategoria(cat);
+        return repository.save(obj);
     }
 }
