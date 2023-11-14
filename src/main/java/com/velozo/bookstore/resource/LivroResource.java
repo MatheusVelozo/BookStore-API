@@ -2,21 +2,24 @@ package com.velozo.bookstore.resource;
 
 import com.velozo.bookstore.Dtos.LivroDTO;
 import com.velozo.bookstore.domain.Livro;
+import com.velozo.bookstore.repositories.LivroRepository;
 import com.velozo.bookstore.service.LivroService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-import java.util.stream.Collectors;
 @CrossOrigin("*")
 @RestController
 @RequestMapping(value = "/livros")
 public class LivroResource {
 
+    @Autowired
+    LivroRepository repository;
     @Autowired
     private LivroService service;
 
@@ -27,15 +30,15 @@ public class LivroResource {
     }
 
     @GetMapping
-    public ResponseEntity<List<LivroDTO>> findAll(@RequestParam (value = "categoria", defaultValue = "0") Integer id_cat) {
-        List<Livro> list = service.findAll(id_cat);
-        List<LivroDTO> listDTO = list.stream().map(obj -> new LivroDTO(obj)).collect(Collectors.toList());
-        return ResponseEntity.ok().body(listDTO);
+    public ResponseEntity<List<Livro>> findAll(@RequestParam (value = "categoria", defaultValue = "0") Integer id_cat) {
+        //List<Livro> list = service.findAll(id_cat);
+        //List<LivroDTO> listDTO = list.stream().map(obj -> new LivroDTO(obj)).collect(Collectors.toList());
+        return ResponseEntity.status(HttpStatus.OK).body(repository.findAll());
     }
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Livro> update(@Valid @PathVariable Integer id, @RequestBody Livro obj) {
-      Livro newObj = service.update(id, obj);
-      return ResponseEntity.ok().body(newObj);
+    public ResponseEntity<Livro> update(@PathVariable @Valid Integer id, @RequestBody LivroDTO livroDTO) {
+      //Livro newObj = service.update(id, obj);
+      return ResponseEntity.status(HttpStatus.OK).body(repository.save(new Livro()));
     }
     @PatchMapping(value = "/{id}")
     public ResponseEntity<Livro> updatePath(@PathVariable Integer id,@Valid @RequestBody Livro obj) {
