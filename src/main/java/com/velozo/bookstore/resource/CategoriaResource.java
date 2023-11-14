@@ -2,9 +2,12 @@ package com.velozo.bookstore.resource;
 
 import com.velozo.bookstore.Dtos.CategoriaDTO;
 import com.velozo.bookstore.domain.Categoria;
+import com.velozo.bookstore.repositories.CategoriaRepository;
 import com.velozo.bookstore.service.CategoriaService;
 import jakarta.validation.Valid;
+import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
@@ -18,6 +21,8 @@ import java.util.stream.Collectors;
 public class CategoriaResource {
 
     @Autowired
+    private CategoriaRepository repository;
+    @Autowired
     private CategoriaService service;
     @GetMapping(value = "/{id}")
     public ResponseEntity<Categoria> findById(@PathVariable Integer id) {
@@ -25,22 +30,19 @@ public class CategoriaResource {
         return ResponseEntity.ok().body(obj);
     }
     @GetMapping
-    public ResponseEntity<List<CategoriaDTO>> findAll() {
-        List<Categoria> list = service.findAll();
-        List<CategoriaDTO> listDTO = list.stream().map(obj -> new CategoriaDTO(obj)).collect(Collectors.toList());
-        return ResponseEntity.ok().body(listDTO);
+    public ResponseEntity<List<Categoria>> findAll() {
+        return ResponseEntity.status(HttpStatus.OK).body(repository.findAll());
     }
 
     @PostMapping
-    public ResponseEntity<Categoria> create(@Valid @RequestBody Categoria obj) {
-        obj = service.create(obj);
-        URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getId()).toUri();
-        return ResponseEntity.created(uri).build();
+    public ResponseEntity<Categoria> create(@RequestBody @Valid CategoriaDTO categoriaDTO) {
+        var Categoria = new Categoria();
+        BeanUtils.copyProperties(categoriaDTO,Categoria);
+        return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(Categoria));
     }
     @PutMapping(value = "/{id}")
-    public ResponseEntity<CategoriaDTO> update(@PathVariable Integer id,@Valid @RequestBody CategoriaDTO objDTO) {
-        Categoria newObj = service.update(id, objDTO);
-        return ResponseEntity.ok().body(new CategoriaDTO(newObj));
+    public ResponseEntity<Categoria> update(@PathVariable Integer id,@RequestBody @Valid CategoriaDTO objDTO) {
+        return ResponseEntity.status(HttpStatus.OK).body(repository.save(new Categoria()));
     }
 
     @DeleteMapping(value = "/{id}")
