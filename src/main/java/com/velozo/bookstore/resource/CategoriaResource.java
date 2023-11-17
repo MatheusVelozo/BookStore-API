@@ -2,6 +2,7 @@ package com.velozo.bookstore.resource;
 
 import com.velozo.bookstore.Dtos.CategoriaDTO;
 import com.velozo.bookstore.domain.Categoria;
+import com.velozo.bookstore.domain.Livro;
 import com.velozo.bookstore.repositories.CategoriaRepository;
 import com.velozo.bookstore.service.CategoriaService;
 import jakarta.validation.Valid;
@@ -24,6 +25,7 @@ public class CategoriaResource {
     private CategoriaRepository repository;
     @Autowired
     private CategoriaService service;
+
     @GetMapping(value = "/{id}")
     public ResponseEntity<Categoria> findById(@PathVariable Integer id) {
         Categoria obj = service.findById(id);
@@ -31,8 +33,14 @@ public class CategoriaResource {
     }
     @GetMapping
     public ResponseEntity<List<Categoria>> findAll() {
-        return ResponseEntity.status(HttpStatus.OK).body(repository.findAll());
+        List<Categoria> categoriaList = service.findAll();
+        if (categoriaList.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(categoriaList);
+        }
     }
+
 
     @PostMapping
     public ResponseEntity<Categoria> create(@RequestBody @Valid CategoriaDTO categoriaDTO) {

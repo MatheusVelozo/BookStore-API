@@ -4,12 +4,13 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.NotEmpty;
 import org.hibernate.validator.constraints.Length;
+import org.springframework.hateoas.RepresentationModel;
 
 import java.io.Serial;
 import java.io.Serializable;
 import java.util.Objects;
 @Entity
-public class Livro implements Serializable {
+public class Livro extends RepresentationModel<Livro> implements Serializable {
     @Serial
     private static final long serialVersionUID = 1L;
     @Id

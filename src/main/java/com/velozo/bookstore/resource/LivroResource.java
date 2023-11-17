@@ -31,9 +31,12 @@ public class LivroResource {
 
     @GetMapping
     public ResponseEntity<List<Livro>> findAll(@RequestParam (value = "categoria", defaultValue = "0") Integer id_cat) {
-        //List<Livro> list = service.findAll(id_cat);
-        //List<LivroDTO> listDTO = list.stream().map(obj -> new LivroDTO(obj)).collect(Collectors.toList());
-        return ResponseEntity.status(HttpStatus.OK).body(repository.findAll());
+        List<Livro> livrolist = service.findAll(id_cat);
+        if (livrolist.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NO_CONTENT).build();
+        } else {
+            return ResponseEntity.status(HttpStatus.OK).body(livrolist);
+        }
     }
     @PutMapping(value = "/{id}")
     public ResponseEntity<Livro> update(@PathVariable @Valid Integer id, @RequestBody LivroDTO livroDTO) {
