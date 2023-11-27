@@ -38,6 +38,11 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
 
     steps:
+      - name: Set up Node.js manually
+        run: |
+          npm install -g n
+          n latest
+
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
@@ -51,3 +56,4 @@ jobs:
           slot-name: 'Production'
           publish-profile: ${{ secrets.AZUREAPPSERVICE_PUBLISHPROFILE_319BF95A53C840169794EA28E0843133 }}
           package: '*.war'
+          node-version: ${{ env.NODE_VERSION }}
