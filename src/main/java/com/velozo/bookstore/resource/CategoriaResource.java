@@ -16,8 +16,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
-@CrossOrigin("*")
+
 @RestController
+@CrossOrigin("http://localhost:4200/")
 @RequestMapping(value = "/categorias")
 public class CategoriaResource {
 

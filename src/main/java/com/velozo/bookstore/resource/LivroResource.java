@@ -13,8 +13,9 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import java.net.URI;
 import java.util.List;
-@CrossOrigin("*")
+
 @RestController
+@CrossOrigin("http://localhost:4200/")
 @RequestMapping(value = "/livros")
 public class LivroResource {
 
