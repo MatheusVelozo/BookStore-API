@@ -41,8 +41,6 @@ public class CategoriaResource {
             return ResponseEntity.status(HttpStatus.OK).body(categoriaList);
         }
     }
-
-
     @PostMapping
     public ResponseEntity<Categoria> create(@RequestBody @Valid CategoriaDTO categoriaDTO) {
         var Categoria = new Categoria();
@@ -51,7 +49,11 @@ public class CategoriaResource {
     }
     @PutMapping(value = "/{id}")
     public ResponseEntity<Categoria> update(@PathVariable Integer id,@RequestBody @Valid CategoriaDTO objDTO) {
-        return ResponseEntity.status(HttpStatus.OK).body(repository.save(new Categoria()));
+        Categoria categoria = service.findById(id);
+        categoria.setNome(objDTO.nome());
+        categoria.setDescricao(objDTO.descricao());
+
+        return ResponseEntity.status(HttpStatus.OK).body(repository.save(categoria));
     }
 
     @DeleteMapping(value = "/{id}")
