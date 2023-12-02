@@ -30,13 +30,11 @@ public class LivroService {
     }
 
     public List<Livro> findAll(Integer id_cat) {
-        List<Livro> livroList = repository.findAll();
-            for (Livro livro : livroList) {
-                id_cat = livro.getId();
-                livro.add(WebMvcLinkBuilder.linkTo(WebMvcLinkBuilder.methodOn(LivroResource.class).findById(id_cat)).withRel("Detalhes sobre o livro."));
-
-            }
-        return livroList;
+        if (id_cat != null && id_cat != 0) {
+            return repository.findAllByCategoria(id_cat);
+        } else {
+            return repository.findAll();
+        }
     }
 
     public Livro update(Integer id, Livro obj) {
