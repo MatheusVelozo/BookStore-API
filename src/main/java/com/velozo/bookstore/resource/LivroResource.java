@@ -40,12 +40,12 @@ public class LivroResource {
         }
     }
     @PutMapping(value = "/{id}")
-    public ResponseEntity<Livro> update(@PathVariable @Valid Integer id, @RequestBody LivroDTO livroDTO) {
-      //Livro newObj = service.update(id, obj);
-      return ResponseEntity.status(HttpStatus.OK).body(repository.save(new Livro()));
+    public ResponseEntity<Livro> update(@PathVariable  Integer id, @RequestBody @Valid Livro obj) {
+      Livro newObj = service.update(id, obj);
+      return ResponseEntity.status(HttpStatus.OK).body(repository.save(newObj));
     }
     @PatchMapping(value = "/{id}")
-    public ResponseEntity<Livro> updatePath(@PathVariable Integer id,@Valid @RequestBody Livro obj) {
+    public ResponseEntity<Livro> updatePath(@PathVariable @Valid Integer id, @RequestBody Livro obj) {
         Livro newObj = service.update(id, obj);
         return ResponseEntity.ok().body(newObj);
     }
